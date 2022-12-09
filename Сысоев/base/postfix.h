@@ -16,6 +16,8 @@ class ArithmeticExpression
 
     string toPostfix()//преобразование в обратную польскую запись
     {
+        int f = 0;
+        postfix = "";
         stack<char> Stack;
         char num;
         for (int pos = 0; pos < infix.length(); pos++)
@@ -27,7 +29,10 @@ class ArithmeticExpression
                 postfix += ' ';
             }
             else if (num == '(')
+            {
+                f += 1;
                 Stack.push(num);
+            }   
             else if (num == ')')
             {
                 while (!Stack.empty() > 0 && Stack.top() != '(')
@@ -36,6 +41,7 @@ class ArithmeticExpression
                     Stack.pop();
                 }
                 Stack.pop();
+                f -= 1;
             }
             else if (priority.find(num) != priority.end())
             {
@@ -47,7 +53,8 @@ class ArithmeticExpression
                 }
                 Stack.push(op);
             }
-
+            /*if (f != 0)
+                throw invalid_argument("invalid_input");*/
 
         }
         while (!Stack.empty())
@@ -55,6 +62,8 @@ class ArithmeticExpression
             postfix += Stack.top();
             Stack.pop();
         }
+        if (f != 0)
+            throw invalid_argument("invalid_input");
         return postfix;
     }
     double GetNumber(string expr, int* i)//преобразование строки в число, начиная с номера pos
@@ -99,7 +108,7 @@ public:
     {
         toPostfix();
     }
-    ArithmeticExpression(string _infix) :infix(_infix)
+    ArithmeticExpression(string _infix="") :infix(_infix)
     {
         toPostfix();
     }
@@ -142,29 +151,29 @@ public:
 
 };
 
-int main()
-{
-    setlocale(2, "rus");
-    string expression;
-    cout << "введите выражение" << endl;
-    cin >> expression;
-    ArithmeticExpression EXPR(expression);
-    cout << "результат выражения:" << endl;
-    cout << EXPR.calc() << endl;
-    while (true)
-    {
-        cout << "для прекращения вычисления введите stop" << endl;
-        cin >> expression;
-        if (expression == "stop")
-            break;
-        else
-        {
-            EXPR.parse(expression);
-            EXPR.convert();
-            cout << "результат выражения:" << endl;
-            cout << EXPR.calc() << endl;
-        }
-    }
-    return 0;
-}
+//int main()
+//{
+//    setlocale(2, "rus");
+//    string expression;
+//    cout << "введите выражение" << endl;
+//    cin >> expression;
+//    ArithmeticExpression EXPR(expression);
+//    cout << "результат выражения:" << endl;
+//    cout << EXPR.calc() << endl;
+//    while (true)
+//    {
+//        cout << "для прекращения вычисления введите stop" << endl;
+//        cin >> expression;
+//        if (expression == "stop")
+//            break;
+//        else
+//        {
+//            EXPR.parse(expression);
+//            EXPR.convert();
+//            cout << "результат выражения:" << endl;
+//            cout << EXPR.calc() << endl;
+//        }
+//    }
+//    return 0;
+//}
 
